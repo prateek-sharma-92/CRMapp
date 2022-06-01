@@ -28,7 +28,7 @@ function Login() {
 
     const data = {
       name: username,
-      userID: userID,
+      userId: userID,
       email: email,
       userType: userType,
       password: password,
@@ -114,7 +114,7 @@ function Login() {
                     className="input-group m-2 form-control"
                     type="text"
                     placeholder="Enter your Name"
-                    id="userName"
+                    id="username"
                     onChange={updateSignupData}
                   />
                   <input

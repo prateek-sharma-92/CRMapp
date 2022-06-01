@@ -1,11 +1,12 @@
-import { Dropdown } from "bootstrap";
 import React, { useState } from "react";
-import { DropdownButton } from "react-bootstrap";
+import { DropdownButton, Dropdown } from "react-bootstrap";
+import { userSignup } from "../Api/auth";
 
 function Login() {
   const [signUp, setshowsignUp] = useState(false);
   const [userType, setuserType] = useState("CUSTOMER");
-
+  const [userSignupData, setUserSignupData] = useState({});
+  const [message, setMessage] = useState("");
   const toggleSignUp = () => {
     setshowsignUp(!signUp);
   };
@@ -13,6 +14,44 @@ function Login() {
   const handleSelect = (e) => {
     setuserType(e);
   };
+
+  const updateSignupData = (e) => {
+    userSignupData[e.target.id] = e.target.value;
+    console.log(userSignupData);
+  };
+
+  const signupFn = (e) => {
+    const username = userSignupData.username;
+    const userID = userSignupData.userID;
+    const email = userSignupData.email;
+    const password = userSignupData.password;
+
+    const data = {
+      name: username,
+      userID: userID,
+      email: email,
+      userType: userType,
+      password: password,
+    };
+    console.log("DATA", data);
+
+    e.preventDefault();
+
+    userSignup(data)
+      .then(function (response) {
+        if (response === 201) {
+          window.location.href = "/";
+        }
+      })
+      .catch(function (error) {
+        if (error.response.status === 400) {
+          setMessage(error.response.data.message);
+        } else {
+          console.log(error);
+        }
+      });
+  };
+
   return (
     <div className="bg-primary d-flex justify-content-center align-items-center vh-100">
       <div className="card m-5 p-5">
@@ -45,27 +84,35 @@ function Login() {
               </div>
             ) : (
               <div className="signup">
-                <form>
+                <form onSubmit={signupFn}>
                   <h4 className="text-center p-3"> Signup</h4>
                   <input
                     className="input-group m-2 form-control"
                     type="text"
                     placeholder="Enter your Name"
+                    id="userName"
+                    onChange={updateSignupData}
                   />
                   <input
                     className="input-group m-2 form-control"
                     type="text"
                     placeholder="Enter your userID"
+                    id="userID"
+                    onChange={updateSignupData}
                   />
                   <input
                     className="input-group m-2 form-control"
                     type="email"
                     placeholder="Enter your email"
+                    id="email"
+                    onChange={updateSignupData}
                   />
                   <input
                     className="input-group m-2 form-control"
                     type="password"
                     placeholder="Enter Password"
+                    id="password"
+                    onChange={updateSignupData}
                   />
 
                   <div className="input-group m-1">
@@ -78,10 +125,10 @@ function Login() {
                       onSelect={handleSelect}
                     >
                       <Dropdown.Item eventKey="CUSTOMER">
-                        Customer
+                        CUSTOMER
                       </Dropdown.Item>
-                      <Dropdown.Item eventKey="CUSTOMER">
-                        Engineer
+                      <Dropdown.Item eventKey="ENGINEER">
+                        ENGINEER
                       </Dropdown.Item>
                     </DropdownButton>
                   </div>
@@ -94,6 +141,7 @@ function Login() {
                   >
                     Already a member? Login
                   </div>
+                  <div className="text-danger text-center">{message}</div>
                 </form>
               </div>
             )}

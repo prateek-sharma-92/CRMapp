@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { DropdownButton, Dropdown } from "react-bootstrap";
-import { userSignup } from "../Api/auth";
+import { userSignup, userSignin } from "../Api/auth";
 
 function Login() {
   const [signUp, setshowsignUp] = useState(false);
@@ -52,6 +52,30 @@ function Login() {
       });
   };
 
+  const loginFn = (e) => {
+    const userID = document.getElementById("userID").value;
+    const password = document.getElementById("password").value;
+
+    const data = {
+      userID: userID,
+      password: password,
+    };
+
+    userSignin(data)
+      .then(function (response) {
+        console.log(response);
+        if (response.status === 200) {
+          //userID, email, userType, userStatis, token
+          localStorage.setItem("name", response.data.name);
+        }
+        //customer, engineer, admin
+        if (response.data.userType === "CUSTOMER") {
+          window.location.href = "/customer";
+        }
+      })
+      .catch();
+  };
+
   return (
     <div className="bg-primary d-flex justify-content-center align-items-center vh-100">
       <div className="card m-5 p-5">
@@ -59,7 +83,7 @@ function Login() {
           <div className="col">
             {!signUp ? (
               <div className="login">
-                <form>
+                <form onSubmit={loginFn}>
                   <h4 className="text-center p-3"> Login</h4>
                   <input
                     className="input-group m-2 form-control"

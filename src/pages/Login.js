@@ -4,7 +4,7 @@ import { userSignup, userSignin } from "../Api/auth";
 
 function Login() {
   const [signUp, setshowsignUp] = useState(false);
-  const [userType, setuserType] = useState("CUSTOMER");
+  const [userType, setuserType] = useState("Customer");
   const [userSignupData, setUserSignupData] = useState({});
   const [message, setMessage] = useState("");
   const toggleSignUp = () => {
@@ -66,14 +66,26 @@ function Login() {
         console.log(response);
         if (response.status === 200) {
           //userID, email, userType, userStatis, token
-          localStorage.setItem("name", response.data.name);
+          localStorage.setItem("Name", response.data.name);
+          localStorage.setItem("Email", response.data.email);
+          localStorage.setItem("User Type", response.data.userType);
+          localStorage.setItem("User Status", response.data.userStatus);
+          localStorage.setItem("Token", response.data.token);
         }
         //customer, engineer, admin
         if (response.data.userType === "CUSTOMER") {
           window.location.href = "/customer";
+        } else if (response.data.userType === "ENGINEER") {
+          window.location.href = "/engineer";
         }
       })
-      .catch();
+      .catch(function (error) {
+        if (error.response.status === 400) {
+          setMessage(error.response.data.message);
+        } else {
+          console.log(error);
+        }
+      });
   };
 
   return (
@@ -139,20 +151,20 @@ function Login() {
                     onChange={updateSignupData}
                   />
 
-                  <div className="input-group m-1">
-                    <span className="text-muted">USer Type</span>
+                  <div className="input-group m-2 form-control">
+                    <span className="text-muted">User Type</span>
                     <DropdownButton
                       align="end"
                       title={userType}
                       variant="light"
-                      className="mx-1"
+                      className="mx-2"
                       onSelect={handleSelect}
                     >
                       <Dropdown.Item eventKey="CUSTOMER">
-                        CUSTOMER
+                        Customer
                       </Dropdown.Item>
                       <Dropdown.Item eventKey="ENGINEER">
-                        ENGINEER
+                        Engineer
                       </Dropdown.Item>
                     </DropdownButton>
                   </div>

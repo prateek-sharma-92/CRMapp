@@ -4,7 +4,7 @@ import { userSignup, userSignin } from "../Api/auth";
 
 function Login() {
   const [signUp, setshowsignUp] = useState(false);
-  const [userType, setuserType] = useState("Customer");
+  const [userType, setuserType] = useState("CUSTOMER");
   const [userSignupData, setUserSignupData] = useState({});
   const [message, setMessage] = useState("");
   const toggleSignUp = () => {
@@ -22,13 +22,13 @@ function Login() {
 
   const signupFn = (e) => {
     const username = userSignupData.username;
-    const userID = userSignupData.userID;
+    const userId = userSignupData.userId;
     const email = userSignupData.email;
     const password = userSignupData.password;
 
     const data = {
       name: username,
-      userId: userID,
+      userId: userId,
       email: email,
       userType: userType,
       password: password,
@@ -53,11 +53,12 @@ function Login() {
   };
 
   const loginFn = (e) => {
-    const userID = document.getElementById("userID").value;
+    e.preventDefault();
+    const userId = document.getElementById("userId").value;
     const password = document.getElementById("password").value;
 
     const data = {
-      userID: userID,
+      userId: userId,
       password: password,
     };
 
@@ -65,18 +66,21 @@ function Login() {
       .then(function (response) {
         console.log(response);
         if (response.status === 200) {
-          //userID, email, userType, userStatis, token
+          //userId, email, userType, userStatis, token
           localStorage.setItem("Name", response.data.name);
+          localStorage.setItem("UserId", response.data.userId);
           localStorage.setItem("Email", response.data.email);
-          localStorage.setItem("User Type", response.data.userType);
-          localStorage.setItem("User Status", response.data.userStatus);
-          localStorage.setItem("Token", response.data.token);
-        }
-        //customer, engineer, admin
-        if (response.data.userType === "CUSTOMER") {
-          window.location.href = "/customer";
-        } else if (response.data.userType === "ENGINEER") {
-          window.location.href = "/engineer";
+          localStorage.setItem("UserType", response.data.userTypes);
+          localStorage.setItem("UserStatus", response.data.userStatus);
+          localStorage.setItem("token", response.data.accessToken);
+
+          if (response.data.userTypes === "CUSTOMER") {
+            window.location.href = "/customer";
+          } else if (response.data.userTypes === "ENGINEER") {
+            window.location.href = "/engineer";
+          } else {
+            window.location.href = "/admin";
+          }
         }
       })
       .catch(function (error) {
@@ -100,12 +104,14 @@ function Login() {
                   <input
                     className="input-group m-2 form-control"
                     type="text"
-                    placeholder="Enter your UserID"
+                    placeholder="Enter your userId"
+                    id="userId"
                   />
                   <input
                     className="input-group m-2 form-control"
                     type="password"
                     placeholder="Enter Password"
+                    id="password"
                   />
                   <button className="btn btn-primary m-2 d-flex justify-content-center align-items-center">
                     Login
@@ -116,6 +122,7 @@ function Login() {
                   >
                     Not a member? Signup
                   </div>
+                  <div className="text-danger text-center">{message}</div>
                 </form>
               </div>
             ) : (
@@ -132,8 +139,8 @@ function Login() {
                   <input
                     className="input-group m-2 form-control"
                     type="text"
-                    placeholder="Enter your userID"
-                    id="userID"
+                    placeholder="Enter your userId"
+                    id="userId"
                     onChange={updateSignupData}
                   />
                   <input
@@ -161,10 +168,10 @@ function Login() {
                       onSelect={handleSelect}
                     >
                       <Dropdown.Item eventKey="CUSTOMER">
-                        Customer
+                        CUSTOMER
                       </Dropdown.Item>
                       <Dropdown.Item eventKey="ENGINEER">
-                        Engineer
+                        ENGINEER
                       </Dropdown.Item>
                     </DropdownButton>
                   </div>

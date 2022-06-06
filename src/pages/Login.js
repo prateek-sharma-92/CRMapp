@@ -57,8 +57,8 @@ function Login() {
 
   const loginFn = (e) => {
     e.preventDefault();
-    const userId = userSignupData.userId;
-    const password = userSignupData.password;
+    const userId = document.getElementById("userId").value;
+    const password = document.getElementById("password").value;
 
     const data = {
       userId: userId,

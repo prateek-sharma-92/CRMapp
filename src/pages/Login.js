@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { DropdownButton, Dropdown } from "react-bootstrap";
 import { userSignup, userSignin } from "../Api/auth";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
   const [signUp, setshowsignUp] = useState(false);
@@ -52,10 +53,12 @@ function Login() {
       });
   };
 
+  let history = useNavigate();
+
   const loginFn = (e) => {
     e.preventDefault();
-    const userId = document.getElementById("userId").value;
-    const password = document.getElementById("password").value;
+    const userId = userSignupData.userId;
+    const password = userSignupData.password;
 
     const data = {
       userId: userId,
@@ -67,19 +70,19 @@ function Login() {
         console.log(response);
         if (response.status === 200) {
           //userId, email, userType, userStatis, token
-          localStorage.setItem("Name", response.data.name);
-          localStorage.setItem("UserId", response.data.userId);
-          localStorage.setItem("Email", response.data.email);
-          localStorage.setItem("UserType", response.data.userTypes);
-          localStorage.setItem("UserStatus", response.data.userStatus);
+          localStorage.setItem("name", response.data.name);
+          localStorage.setItem("userId", response.data.userId);
+          localStorage.setItem("email", response.data.email);
+          localStorage.setItem("userType", response.data.userTypes);
+          localStorage.setItem("userStatus", response.data.userStatus);
           localStorage.setItem("token", response.data.accessToken);
 
           if (response.data.userTypes === "CUSTOMER") {
-            window.location.href = "/customer";
+            history("/customer");
           } else if (response.data.userTypes === "ENGINEER") {
-            window.location.href = "/engineer";
+            history("/engineer");
           } else {
-            window.location.href = "/admin";
+            history("/admin");
           }
         }
       })

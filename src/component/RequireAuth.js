@@ -5,8 +5,10 @@ const RequireAuth = ({ allowedRoles }) => {
 
   return localStorage.getItem("userTypes" === allowedRoles[0]) ? (
     <Outlet />
-  ) : (
+  ) : localStorage.getItem("userTypes") ? (
     <Navigate to="/unauthorised" state={{ from: location }} replace />
+  ) : (
+    <Navigate to="/" state={{ from: location }} replace />
   );
 };
 

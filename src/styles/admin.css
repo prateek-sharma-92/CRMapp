@@ -1,0 +1,22 @@
+.border-b {
+  border-radius: 5px;
+  /* box-shadow: 0 6px 10px rgba(0, 0, 0, 0.8), 0 6px 10px rgba(0, 0, 0, 0.8); */
+  transition: 0.3 ease-in;
+  cursor: pointer;
+}
+
+.border-b:hover {
+  transform: scale(1.05);
+}
+.border-blue {
+  border-bottom: 5px solid darkblue;
+}
+.border-yellow {
+  border-bottom: 5px solid goldenrod;
+}
+.border-green {
+  border-bottom: 5px solid rgb(109, 228, 109);
+}
+.border-red {
+  border-bottom: 5px solid rgba(252, 9, 9, 0.933);
+}

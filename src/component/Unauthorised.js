@@ -1,8 +1,8 @@
 import React from "react";
-import not from "../assets/404.svg";
 import { useNavigate } from "react-router-dom";
+import not from "../assets/404 copy.svg";
 
-function NotFound() {
+function Unauthorised() {
   const navigate = useNavigate();
 
   const goBack = () => navigate(-1);
@@ -10,10 +10,10 @@ function NotFound() {
   return (
     <section className="bg-light vh-100 d-flex justify-content-center align-items-center text-center">
       <div>
-        <h1>Not Found</h1>
+        <h1>Unauthorized Access</h1>
         <img src={not} alt="" />
         <br />
-        <p>Page is not available.</p>
+        <p>You do not have access to the requested page.</p>
         <div className="flex-row">
           <button className="btn btn-primary" onClick={goBack}>
             Go Back
@@ -24,4 +24,4 @@ function NotFound() {
   );
 }
 
-export default NotFound;
+export default Unauthorised;

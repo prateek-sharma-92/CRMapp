@@ -31,7 +31,7 @@ function Login() {
       name: username,
       userId: userId,
       email: email,
-      userType: userType,
+      userTypes: userType,
       password: password,
     };
     console.log("DATA", data);
@@ -41,7 +41,7 @@ function Login() {
     userSignup(data)
       .then(function (response) {
         if (response === 201) {
-          window.location.href = "/";
+          history(0);
         }
       })
       .catch(function (error) {
@@ -52,18 +52,18 @@ function Login() {
         }
       });
   };
-
-  let history = useNavigate();
+  const history = useNavigate();
 
   const loginFn = (e) => {
-    e.preventDefault();
-    const userId = document.getElementById("userId").value;
-    const password = document.getElementById("password").value;
+    const userId = userSignupData.userId;
+    const password = userSignupData.password;
 
     const data = {
       userId: userId,
       password: password,
     };
+    console.log("DATA", data);
+    e.preventDefault();
 
     userSignin(data)
       .then(function (response) {
@@ -73,7 +73,7 @@ function Login() {
           localStorage.setItem("name", response.data.name);
           localStorage.setItem("userId", response.data.userId);
           localStorage.setItem("email", response.data.email);
-          localStorage.setItem("userType", response.data.userTypes);
+          localStorage.setItem("userTypes", response.data.userTypes);
           localStorage.setItem("userStatus", response.data.userStatus);
           localStorage.setItem("token", response.data.accessToken);
 
@@ -109,12 +109,14 @@ function Login() {
                     type="text"
                     placeholder="Enter your userId"
                     id="userId"
+                    onChange={updateSignupData}
                   />
                   <input
                     className="input-group m-2 form-control"
                     type="password"
                     placeholder="Enter Password"
                     id="password"
+                    onChange={updateSignupData}
                   />
                   <button className="btn btn-primary m-2 d-flex justify-content-center align-items-center">
                     Login

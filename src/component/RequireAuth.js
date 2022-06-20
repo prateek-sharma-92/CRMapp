@@ -3,12 +3,15 @@ import { useLocation, Outlet, Navigate } from "react-router-dom";
 const RequireAuth = ({ allowedRoles }) => {
   const location = useLocation();
 
-  return localStorage.getItem("userType" === allowedRoles[0]) ? (
-    <Outlet />
-  ) : localStorage.getItem("userTypes") ? (
-    <Navigate to="/unauthorised" state={{ from: location }} replace />
-  ) : (
-    <Navigate to="/" state={{ from: location }} replace />
+  return (
+    // wrap this condition with status = logged in
+    localStorage.getItem("userTypes") === allowedRoles[0] ? (
+      <Outlet />
+    ) : localStorage.getItem("userTypes") ? (
+      <Navigate to="/unauthorized" state={{ from: location }} replace />
+    ) : (
+      <Navigate to="/" state={{ from: location }} replace />
+    )
   );
 };
 
